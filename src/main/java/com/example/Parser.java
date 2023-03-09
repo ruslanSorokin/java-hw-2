@@ -5,16 +5,15 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 
 public class Parser {
 
     private String inPath_;
     private String outPath_;
-    private HashMap<Character, Long> map_;
+    private HashMap<Character, Integer> map_;
 
-    public Parser(InputStream inputStream) {
+    public Parser() {
     }
 
     public Parser(String inPath, String outPath) {
@@ -38,8 +37,9 @@ public class Parser {
         bWriter.close();
     }
 
-    public HashMap<Character, Long> read(BufferedReader bReader) throws IOException {
-        var ret = new HashMap<Character, Long>();
+    public HashMap<Character, Integer> read(BufferedReader bReader) throws IOException {
+        var ret = new HashMap<Character, Integer>();
+
         while (true) {
             var rawInput = bReader.readLine();
 
@@ -49,19 +49,21 @@ public class Parser {
 
             for (int i = 0; i < rawInput.length(); i++) {
                 var character = rawInput.charAt(i);
-                ret.put(character, ret.get(character));
+                ret.put(character, ret.getOrDefault(character, 0) + 1);
             }
         }
+
         return ret;
     }
 
-    public void write(HashMap<Character, Long> map, BufferedWriter bWriter) throws IOException {
-        for (HashMap.Entry<Character, Long> pair : map.entrySet()) {
+    public void write(HashMap<Character, Integer> map, BufferedWriter bWriter) throws IOException {
+        for (HashMap.Entry<Character, Integer> pair : map.entrySet()) {
             var key = pair.getKey();
 
             if (Character.isLetter(key) || Character.isDigit(key)) {
                 bWriter.write(pair.toString() + '\n');
             }
+
         }
     }
 }
